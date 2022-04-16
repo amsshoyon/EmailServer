@@ -4,17 +4,15 @@ import { ServiceModule } from './service/service.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { TypeOrmConfig } from './config/typeorm.config';
-import { Service } from './service/service.entity';
+import { AuthModule } from './auth/auth.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
             isGlobal: true
         }),
-        TypeOrmModule.forRoot({
-            ...TypeOrmConfig,
-            entities: [Service]
-        }),
-        ServiceModule
+        TypeOrmModule.forRoot(TypeOrmConfig),
+        ServiceModule,
+        AuthModule
     ]
 })
 export class AppModule {

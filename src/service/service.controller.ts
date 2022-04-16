@@ -1,8 +1,9 @@
 import { CreateServiceDto } from './dto/create-service-dto';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Service } from './service.entity';
 import { GetServiceFilterDto } from './dto/get-service-filter.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('service')
 export class ServiceController {

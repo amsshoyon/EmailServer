@@ -1,5 +1,5 @@
 import { CreateServiceDto } from './dto/create-service-dto';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Service } from './service.model';
 
@@ -18,6 +18,7 @@ export class ServiceController {
     }
 
     @Post()
+    @UsePipes(ValidationPipe)
     createService(@Body() createServiceDto: CreateServiceDto): Service {
         return this.serviceService.createService(createServiceDto);
     }

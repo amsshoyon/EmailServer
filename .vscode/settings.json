@@ -8,6 +8,7 @@
         "**/Thumbs.db": true,
         "node_modules": true,
         "test": true,
-        ".vscode": true
+        "dist": true,
+        ".vscode": false
     }
 }

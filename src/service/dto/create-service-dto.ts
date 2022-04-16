@@ -1,3 +1,5 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateServiceDto {
-    title: string;
+    @IsNotEmpty() title: string;
 }

@@ -1,5 +1,5 @@
 import { CreateServiceDto } from './dto/create-service-dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Service } from './service.model';
 import { v4 as uuid } from 'uuid';
 
@@ -12,7 +12,11 @@ export class ServiceService {
     }
 
     getServiceById(id: string): Service {
-        return this.services.find((service) => service.id === id);
+        const service = this.services.find(service => service.id === id);
+        if (!service) {
+            throw new NotFoundException(`Service with id ${id} not found`);
+        }
+        return service;
     }
 
     createService(createServiceDto: CreateServiceDto): Service {
@@ -28,6 +32,7 @@ export class ServiceService {
     }
 
     deleteService(id: string): void {
-        this.services = this.services.filter((service) => service.id !== id);
+        const findService = this.getServiceById(id);
+        this.services = this.services.filter(service => service.id !== findService.id);
     }
 }

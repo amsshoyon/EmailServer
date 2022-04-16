@@ -1,38 +1,33 @@
 import { CreateServiceDto } from './dto/create-service-dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Service } from './service.model';
-import { v4 as uuid } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Service } from './service.entity';
+import { GetServiceFilterDto } from './dto/get-service-filter.dto';
+import { ServiceRepository } from './service.repository';
 
 @Injectable()
 export class ServiceService {
-    private services: Service[] = [];
+    constructor(
+        @InjectRepository(ServiceRepository)
+        private serviceRepository: ServiceRepository
+    ) {}
 
-    getAllServices() {
-        return this.services;
+    async getAllServices(filterDto: GetServiceFilterDto): Promise<Service[]> {
+        return this.serviceRepository.getServices(filterDto);
     }
 
-    getServiceById(id: string): Service {
-        const service = this.services.find(service => service.id === id);
-        if (!service) {
-            throw new NotFoundException(`Service with id ${id} not found`);
-        }
+    async getServiceById(id: number): Promise<Service> {
+        const service = await this.serviceRepository.findOne(id);
+        if (!service) throw new NotFoundException(`Service with id ${id} not found`);
         return service;
     }
 
-    createService(createServiceDto: CreateServiceDto): Service {
-        const { title } = createServiceDto;
-
-        const service: Service = {
-            id: uuid(),
-            title
-        };
-
-        this.services.push(service);
-        return service;
+    async createService(createServiceDto: CreateServiceDto): Promise<Service> {
+        return this.serviceRepository.createService(createServiceDto);
     }
 
-    deleteService(id: string): void {
-        const findService = this.getServiceById(id);
-        this.services = this.services.filter(service => service.id !== findService.id);
+    async deleteService(id: number): Promise<void> {
+        const result = await this.serviceRepository.delete(id);
+        if (result.affected === 0) throw new NotFoundException(`Task with ID "${id}" not found`);
     }
 }

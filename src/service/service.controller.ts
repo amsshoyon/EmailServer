@@ -6,6 +6,7 @@ import { GetServiceFilterDto } from './dto/get-service-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('service')
+@UseGuards(AuthGuard())
 export class ServiceController {
     constructor(private serviceService: ServiceService) {}
 

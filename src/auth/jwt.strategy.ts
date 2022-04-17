@@ -1,4 +1,4 @@
-import { JwtPayload } from './jwt-payload.interface';
+import { JwtPayload } from './user.interface';
 import { UserRepository } from './user.repository';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';

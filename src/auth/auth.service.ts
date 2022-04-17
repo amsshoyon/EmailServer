@@ -13,8 +13,9 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-        return this.userRepository.signUp(authCredentialsDto);
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+        await this.userRepository.signUp(authCredentialsDto);
+        return this.signIn(authCredentialsDto);
     }
 
     async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {

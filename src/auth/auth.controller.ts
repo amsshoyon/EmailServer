@@ -4,7 +4,7 @@ import { Body, Controller, Get, Post, UseGuards, UseInterceptors, ValidationPipe
 import { AuthService } from './auth.service';
 import { GetUser } from './get-user.decorator';
 import { User } from './user.entity';
-import { UserInterface, UserResponse } from './user.interface';
+import { UserResponse } from './user.interface';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 
 @Controller('auth')

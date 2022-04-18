@@ -1,11 +1,13 @@
 import { CreateServiceDto } from './dto/create-service-dto';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Service } from './service.entity';
 import { GetServiceFilterDto } from './dto/get-service-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 
 @Controller('service')
+@UseInterceptors(ResponseInterceptor)
 @UseGuards(AuthGuard())
 export class ServiceController {
     constructor(private serviceService: ServiceService) {}

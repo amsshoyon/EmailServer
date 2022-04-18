@@ -24,10 +24,11 @@ export class AuthController {
 
     @Get('/get-user')
     @UseGuards(AuthGuard())
-    getUser(@GetUser() user: User): UserInterface {
+    getUser(@GetUser() user: User): any {
+        const { id, username } = user;
         return {
-            id: user.id,
-            username: user.username
+            message: 'success',
+            result: { id, username }
         };
     }
 }

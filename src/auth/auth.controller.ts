@@ -26,9 +26,6 @@ export class AuthController {
     @UseGuards(AuthGuard())
     getUser(@GetUser() user: User): any {
         const { id, username } = user;
-        return {
-            message: 'success',
-            result: { id, username }
-        };
+        return { id, username };
     }
 }

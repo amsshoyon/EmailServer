@@ -12,7 +12,7 @@ export class ServiceService {
         private serviceRepository: ServiceRepository
     ) {}
 
-    async getAllServices(filterDto: GetServiceFilterDto): Promise<Service[]> {
+    async getAllServices(filterDto: GetServiceFilterDto): Promise<{ result: Service[]; count: number }> {
         return this.serviceRepository.getServices(filterDto);
     }
 

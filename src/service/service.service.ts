@@ -28,6 +28,6 @@ export class ServiceService {
 
     async deleteService(id: number): Promise<void> {
         const result = await this.serviceRepository.delete(id);
-        if (result.affected === 0) throw new NotFoundException(`Task with ID "${id}" not found`);
+        if (result.affected === 0) throw new NotFoundException(`Service with ID "${id}" not found`);
     }
 }

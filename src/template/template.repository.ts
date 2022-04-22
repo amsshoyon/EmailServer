@@ -14,11 +14,13 @@ export class TemplateRepository extends Repository<Template> {
     }
 
     async createTemplate(createServiceDto: CreateTemplateDto): Promise<Template> {
-        const { title, templateName, serviceId, data } = createServiceDto;
+        const { title, templateName, serviceId, data, cc, bcc } = createServiceDto;
         const template = new Template();
         template.title = title;
         template.template = templateName;
         template.data = data;
+        template.cc = cc;
+        template.bcc = bcc;
         template.serviceId = serviceId;
         await template.save();
         return template;

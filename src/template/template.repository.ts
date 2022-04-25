@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Template } from './template.entity';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { CreateTemplateDto } from './dto/create-template-dto';
-
+import { SaveFileFromBase64 } from 'src/utils/common';
 @EntityRepository(Template)
 export class TemplateRepository extends Repository<Template> {
     async getTemplates(filterDto: GetTemplateFilterDto): Promise<{ result: Template[]; count: number }> {
@@ -17,12 +17,13 @@ export class TemplateRepository extends Repository<Template> {
         const { title, templateName, serviceId, data, cc, bcc } = createServiceDto;
         const template = new Template();
         template.title = title;
-        template.template = templateName;
+        template.template = SaveFileFromBase64(templateName, title);
         template.data = data;
         template.cc = cc;
         template.bcc = bcc;
         template.serviceId = serviceId;
-        await template.save();
+        console.log('template:', template);
+        // await template.save();
         return template;
     }
 }

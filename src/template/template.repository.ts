@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Template } from './template.entity';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
-import { CreateTemplateDto } from './dto/create-template-dto';
+import { AttachmentDto, CreateTemplateDto } from './dto/create-template-dto';
 import { SaveFileFromBase64 } from 'src/utils/common';
 import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Template)
@@ -15,9 +15,22 @@ export class TemplateRepository extends Repository<Template> {
     }
 
     async createTemplate(createServiceDto: CreateTemplateDto): Promise<Template> {
-        const { title, templateName, serviceId, data, cc, bcc } = createServiceDto;
+        const { title, templateName, serviceId, data, cc, bcc, attachment } = createServiceDto;
         const fileName = await SaveFileFromBase64(templateName, title);
         if (!fileName) throw new InternalServerErrorException(`Error writting file`);
+        let attachmentString = '';
+        if (attachment && attachment.length) {
+            const attachmentArr = attachment.reduce(async (acc: any, curr) => {
+                const attachmentName = await SaveFileFromBase64(curr.attachmentName, `attachment_${title}`);
+                if (!attachmentName) throw new InternalServerErrorException(`Error writting file`);
+                const data = {
+                    attachmentName: attachmentName,
+                    attachmentData: curr.attachmentData
+                };
+                return acc.push(data);
+            }, []);
+            attachmentString = JSON.stringify(attachmentArr);
+        }
         const template = new Template();
         template.title = title;
         template.template = fileName;
@@ -25,7 +38,8 @@ export class TemplateRepository extends Repository<Template> {
         template.cc = cc;
         template.bcc = bcc;
         template.serviceId = serviceId;
-        await template.save();
+        template.attachment = attachmentString;
+        // await template.save();
         return template;
     }
 }

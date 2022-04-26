@@ -16,6 +16,12 @@ export class Template extends BaseEntity {
     data!: string;
 
     @Column({ nullable: true })
+    cc!: string;
+
+    @Column({ nullable: true })
+    bcc!: string;
+
+    @Column({ nullable: true })
     attachment!: string;
 
     @Column({ default: true })

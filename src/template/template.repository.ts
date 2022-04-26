@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Template } from './template.entity';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
-import { AttachmentDto, CreateTemplateDto } from './dto/create-template-dto';
+import { CreateTemplateDto, AttachmentDto } from './dto/create-template-dto';
 import { SaveFileFromBase64 } from 'src/utils/common';
 import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Template)
@@ -18,18 +18,18 @@ export class TemplateRepository extends Repository<Template> {
         const { title, templateName, serviceId, data, cc, bcc, attachment } = createServiceDto;
         const fileName = await SaveFileFromBase64(templateName, title);
         if (!fileName) throw new InternalServerErrorException(`Error writting file`);
-        let attachmentString = '';
+        let attachmentArr = [];
         if (attachment && attachment.length) {
-            const attachmentArr = await attachment.reduce(async (acc: any, curr) => {
+            attachmentArr = await attachment.reduce(async (accP: any, curr): Promise<AttachmentDto[]> => {
                 const attachmentName = await SaveFileFromBase64(curr.attachmentName, `attachment_${title}`);
                 if (!attachmentName) throw new InternalServerErrorException(`Error writting file`);
                 const data = {
                     attachmentName: attachmentName,
                     attachmentData: curr.attachmentData
                 };
+                const acc = await accP;
                 return [...acc, data];
-            }, []);
-            attachmentString = JSON.stringify(attachmentArr);
+            }, Promise.resolve([]));
         }
         const template = new Template();
         template.title = title;
@@ -38,9 +38,9 @@ export class TemplateRepository extends Repository<Template> {
         template.cc = cc;
         template.bcc = bcc;
         template.serviceId = serviceId;
-        template.attachment = attachmentString;
+        template.attachment = JSON.stringify(attachmentArr);
         await template.save();
-        template.attachment = JSON.parse(attachmentString);
+        template.attachment = JSON.parse(template.attachment);
         return template;
     }
 }

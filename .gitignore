@@ -40,3 +40,6 @@ package-lock.json
 
 # env
 .env
+
+# storage
+/storage

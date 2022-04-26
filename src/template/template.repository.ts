@@ -20,14 +20,14 @@ export class TemplateRepository extends Repository<Template> {
         if (!fileName) throw new InternalServerErrorException(`Error writting file`);
         let attachmentString = '';
         if (attachment && attachment.length) {
-            const attachmentArr = attachment.reduce(async (acc: any, curr) => {
+            const attachmentArr = await attachment.reduce(async (acc: any, curr) => {
                 const attachmentName = await SaveFileFromBase64(curr.attachmentName, `attachment_${title}`);
                 if (!attachmentName) throw new InternalServerErrorException(`Error writting file`);
                 const data = {
                     attachmentName: attachmentName,
                     attachmentData: curr.attachmentData
                 };
-                return acc.push(data);
+                return [...acc, data];
             }, []);
             attachmentString = JSON.stringify(attachmentArr);
         }
@@ -39,7 +39,8 @@ export class TemplateRepository extends Repository<Template> {
         template.bcc = bcc;
         template.serviceId = serviceId;
         template.attachment = attachmentString;
-        // await template.save();
+        await template.save();
+        template.attachment = JSON.parse(attachmentString);
         return template;
     }
 }

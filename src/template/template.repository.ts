@@ -33,7 +33,7 @@ export class TemplateRepository extends Repository<Template> {
         }
         const template = new Template();
         template.title = title;
-        template.template = fileName;
+        template.templateName = fileName;
         template.data = data;
         template.cc = cc;
         template.bcc = bcc;

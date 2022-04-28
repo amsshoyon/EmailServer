@@ -19,6 +19,7 @@ export class TemplateService {
     async getTemplateById(id: number): Promise<Template> {
         const template = await this.templateRepository.findOne(id);
         if (!template) throw new NotFoundException(`Template with id ${id} not found`);
+        template.attachment = JSON.parse(template.attachment);
         return template;
     }
 

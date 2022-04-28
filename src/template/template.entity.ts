@@ -10,7 +10,7 @@ export class Template extends BaseEntity {
     title: string;
 
     @Column({ nullable: true })
-    template!: string;
+    templateName!: string;
 
     @Column({ nullable: true })
     data!: string;

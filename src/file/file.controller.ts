@@ -1,14 +1,12 @@
-import { Controller, Get, Query, Response, StreamableFile } from '@nestjs/common';
+import { Controller, Get, Param, Query, Response, StreamableFile } from '@nestjs/common';
 import { createReadStream } from 'fs';
 import { join } from 'path';
-import { FileService } from './file.service';
 
 @Controller('file')
 export class FileController {
-    constructor(private fileService: FileService) {}
-
-    @Get()
-    getFile(@Query('name') name: string, @Response({ passthrough: true }) res): any {
+    @Get('/:name')
+    getFile(@Param('name') name: string, @Response({ passthrough: true }) res): any {
+        console.log('name:', name)
         res.set({
             'Content-Type': 'text/pdf',
             'Content-Disposition': `attachment; filename=${name}`

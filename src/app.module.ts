@@ -6,6 +6,7 @@ import { Connection } from 'typeorm';
 import { TypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { TemplateModule } from './template/template.module';
+import { FileModule } from './file/file.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -14,7 +15,8 @@ import { TemplateModule } from './template/template.module';
         TypeOrmModule.forRoot(TypeOrmConfig),
         ServiceModule,
         AuthModule,
-        TemplateModule
+        TemplateModule,
+        FileModule
     ]
 })
 export class AppModule {

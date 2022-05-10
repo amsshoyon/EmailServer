@@ -1,12 +1,13 @@
-import { Controller, Get, Param, Query, Response, StreamableFile } from '@nestjs/common';
+import { Controller, Get, Param, Response, StreamableFile, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 
 @Controller('file')
+@UseGuards(AuthGuard())
 export class FileController {
     @Get('/:name')
     getFile(@Param('name') name: string, @Response({ passthrough: true }) res): any {
-        console.log('name:', name)
         res.set({
             'Content-Type': 'text/pdf',
             'Content-Disposition': `attachment; filename=${name}`

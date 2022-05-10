@@ -7,6 +7,7 @@ import { TypeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { TemplateModule } from './template/template.module';
 import { FileModule } from './file/file.module';
+import { SendMailModule } from './send-mail/send-mail.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -16,7 +17,8 @@ import { FileModule } from './file/file.module';
         ServiceModule,
         AuthModule,
         TemplateModule,
-        FileModule
+        FileModule,
+        SendMailModule
     ]
 })
 export class AppModule {

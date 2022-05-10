@@ -2,7 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { Template } from './template.entity';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { CreateTemplateDto, AttachmentDto } from './dto/create-template-dto';
-import { SaveFileFromBase64 } from 'src/utils/common';
+import { SaveFileFromBase64, toString } from 'src/utils/common';
 import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Template)
 export class TemplateRepository extends Repository<Template> {
@@ -25,7 +25,7 @@ export class TemplateRepository extends Repository<Template> {
                 if (!attachmentName) throw new InternalServerErrorException(`Error writting file`);
                 const data = {
                     attachmentName: attachmentName,
-                    attachmentData: curr.attachmentData
+                    attachmentData: toString(curr.attachmentData)
                 };
                 const acc = await accP;
                 return [...acc, data];
@@ -34,12 +34,13 @@ export class TemplateRepository extends Repository<Template> {
         const template = new Template();
         template.title = title;
         template.templateName = fileName;
-        template.data = data;
+        template.data = toString(data);
         template.cc = cc;
         template.bcc = bcc;
         template.serviceId = serviceId;
         template.attachment = JSON.stringify(attachmentArr);
-        await template.save();
+        console.log('template:', template)
+        // await template.save();
         template.attachment = JSON.parse(template.attachment);
         return template;
     }

@@ -28,3 +28,10 @@ export const ToCamelCase = (str: string): string => {
         })
         .replace(/\s+/g, '');
 };
+
+export const toString = (str: string): string => {
+    return str
+        .replace(/\r?\n|\r/g, '') // remove all newlines
+        .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
+        .replace(/\s\s+/g, ' '); // remove multiple spaces
+};

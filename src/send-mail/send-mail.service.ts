@@ -1,13 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Template } from 'src/template/template.entity';
 import { TemplateRepository } from 'src/template/template.repository';
 import { modelTemplateData } from 'src/utils/common';
 import { EmailDto } from './dto/mailDto';
 import * as fs from 'fs';
+const ejs = require('ejs');
 import { join } from 'path';
 import { Mailer } from 'src/utils/sendMail';
-const ejs = require('ejs');
+import { pdfGenerator } from 'src/utils/pdfGenerator';
+const puppeteer = require('puppeteer');
 
 @Injectable()
 export class SendMailService {
@@ -29,19 +31,34 @@ export class SendMailService {
         if (!template) throw new NotFoundException(`Template with id ${serviceId} not found`);
         const dataModel = modelTemplateData(template);
         const templateName = dataModel.templateName;
-        fs.readFile(join(process.cwd(), `storage/${templateName}`), 'utf8', async (error, data) => {
-            if (error) console.log(`ERROR: ${error}`);
 
-            const html = ejs.render(data, dataModel.templateData);
+        const attachments = await dataModel.attachment.reduce(async (acc, curr) => {
+            const buffer = await pdfGenerator(curr.attachmentName, curr.attachmentData);
+            const attachmentObj = {
+                filename: curr.attachmentName.replace('.html', '.pdf'),
+                content: buffer
+            };
+            return [...(await acc), attachmentObj];
+        }, Promise.resolve([]));
+
+        try {
+            const templateHtml = fs.readFileSync(join(process.cwd(), `storage/${templateName}`), 'utf8');
+            const html = ejs.render(templateHtml, dataModel.templateData);
             const message = {
                 to: 'amsshoyon@gmail.com',
                 cc: dataModel.cc,
                 bcc: dataModel.bcc,
                 subject: 'test email',
-                html: html
+                html: html,
+                attachments: attachments
             };
-
-            const mail = await Mailer(message);
-        });
+            try {
+                return await Mailer(message);
+            } catch (err) {
+                throw new BadRequestException(err);
+            }
+        } catch (err) {
+            throw new BadRequestException(err);
+        }
     }
 }

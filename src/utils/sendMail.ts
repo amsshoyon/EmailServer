@@ -39,6 +39,5 @@ transporter.verify((error, success) => {
 });
 
 export const Mailer = message => {
-    console.log('message:', message)
     return transporter.sendMail(message);
 };

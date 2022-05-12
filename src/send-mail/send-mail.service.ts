@@ -4,6 +4,10 @@ import { Template } from 'src/template/template.entity';
 import { TemplateRepository } from 'src/template/template.repository';
 import { modelTemplateData } from 'src/utils/common';
 import { EmailDto } from './dto/mailDto';
+import * as fs from 'fs';
+import { join } from 'path';
+import { Mailer } from 'src/utils/sendMail';
+const ejs = require('ejs');
 
 @Injectable()
 export class SendMailService {
@@ -20,11 +24,24 @@ export class SendMailService {
     }
 
     async sendEmail(emailDto: EmailDto): Promise<any> {
-        const { serviceId } = emailDto;
+        const { serviceId, data } = emailDto;
         const template = await this.templateRepository.findOne(serviceId);
         if (!template) throw new NotFoundException(`Template with id ${serviceId} not found`);
         const dataModel = modelTemplateData(template);
-        return dataModel;
-        // const templateDataModel = JSON.parse(template.attachment);
+        const templateName = dataModel.templateName;
+        fs.readFile(join(process.cwd(), `storage/${templateName}`), 'utf8', async (error, data) => {
+            if (error) console.log(`ERROR: ${error}`);
+
+            const html = ejs.render(data, dataModel.templateData);
+            const message = {
+                to: 'amsshoyon@gmail.com',
+                cc: dataModel.cc,
+                bcc: dataModel.bcc,
+                subject: 'test email',
+                html: html
+            };
+
+            const mail = await Mailer(message);
+        });
     }
 }

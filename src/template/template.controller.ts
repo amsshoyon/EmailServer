@@ -4,7 +4,7 @@ import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 import { TemplateService } from './template.service';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { Template } from './template.entity';
-import { CreateTemplateDto } from './dto/create-template-dto';
+import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
 
 @Controller('template')
 @UseInterceptors(ResponseInterceptor)
@@ -13,7 +13,7 @@ export class TemplateController {
     constructor(private templateService: TemplateService) {}
 
     @Get()
-    getAllTemplates(@Query(ValidationPipe) filterDto: GetTemplateFilterDto) {
+    getAllTemplates(@Query(ValidationPipe) filterDto: GetTemplateFilterDto): Promise<{ templates: TemplateDto[]; count: number }> {
         return this.templateService.getAllTemplates(filterDto);
     }
 
@@ -24,7 +24,7 @@ export class TemplateController {
 
     @Post()
     @UsePipes(ValidationPipe)
-    createTemplates(@Body() createTemplatesDto: CreateTemplateDto): Promise<Template> {
+    createTemplates(@Body() createTemplatesDto: CreateTemplateDto): Promise<TemplateDto> {
         return this.templateService.createTemplate(createTemplatesDto);
     }
 

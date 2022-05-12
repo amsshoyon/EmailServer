@@ -1,5 +1,6 @@
 import { Body, Controller, Post, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
+import { EmailDto } from './dto/mailDto';
 import { SendMailService } from './send-mail.service';
 
 @Controller('send-mail')
@@ -9,7 +10,7 @@ export class SendMailController {
 
     @Post()
     @UsePipes(ValidationPipe)
-    snedEmail(@Body() mailData: any): Promise<any> {
-        return this.sendMailService.sendEmail(mailData);
+    snedEmail(@Body() emailDto: EmailDto): Promise<any> {
+        return this.sendMailService.sendEmail(emailDto);
     }
 }

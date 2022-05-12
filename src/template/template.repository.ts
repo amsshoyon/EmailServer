@@ -1,20 +1,21 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Template } from './template.entity';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
-import { CreateTemplateDto, AttachmentDto } from './dto/create-template-dto';
-import { SaveFileFromBase64, toString } from 'src/utils/common';
+import { CreateTemplateDto, AttachmentDto, TemplateDto } from './dto/template-dtos';
+import { modelTemplateData, SaveFileFromBase64, toString } from 'src/utils/common';
 import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Template)
 export class TemplateRepository extends Repository<Template> {
-    async getTemplates(filterDto: GetTemplateFilterDto): Promise<{ result: Template[]; count: number }> {
+    async getTemplates(filterDto: GetTemplateFilterDto): Promise<{ templates: TemplateDto[]; count: number }> {
         const { search } = filterDto;
         const query = this.createQueryBuilder('template');
         if (search) query.andWhere('(template.title LIKE :search)', { search: `%${search}%` });
         const [result, count] = await query.getManyAndCount();
-        return { result, count };
+        const templates = result.reduce((acc, curr) => [...acc, modelTemplateData(curr)], []);
+        return { templates: templates, count };
     }
 
-    async createTemplate(createServiceDto: CreateTemplateDto): Promise<Template> {
+    async createTemplate(createServiceDto: CreateTemplateDto): Promise<TemplateDto> {
         const { title, templateName, serviceId, data, cc, bcc, attachment } = createServiceDto;
         const fileName = await SaveFileFromBase64(templateName, title);
         if (!fileName) throw new InternalServerErrorException(`Error writting file`);
@@ -39,9 +40,7 @@ export class TemplateRepository extends Repository<Template> {
         template.bcc = bcc;
         template.serviceId = serviceId;
         template.attachment = JSON.stringify(attachmentArr);
-        console.log('template:', template)
-        // await template.save();
-        template.attachment = JSON.parse(template.attachment);
-        return template;
+        await template.save();
+        return modelTemplateData(template);
     }
 }

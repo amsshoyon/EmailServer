@@ -12,7 +12,7 @@ export class Template extends BaseEntity {
     @Column({ nullable: true })
     templateName!: string;
 
-    @Column({ nullable: true })
+    @Column('longtext', { nullable: true })
     data!: string;
 
     @Column({ nullable: true })
@@ -21,7 +21,7 @@ export class Template extends BaseEntity {
     @Column({ nullable: true })
     bcc!: string;
 
-    @Column({ nullable: true })
+    @Column('longtext', { nullable: true })
     attachment!: string;
 
     @Column({ default: true })

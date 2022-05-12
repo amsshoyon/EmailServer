@@ -1,3 +1,5 @@
+import { TemplateDto } from 'src/template/dto/template-dtos';
+
 const fs = require('fs');
 const crypto = require('crypto');
 const filePath = 'storage';
@@ -34,4 +36,24 @@ export const toString = (str: string): string => {
         .replace(/\r?\n|\r/g, '') // remove all newlines
         .replace(/(\r\n|\n|\r)/gm, '') // remove line breaks
         .replace(/\s\s+/g, ' '); // remove multiple spaces
+};
+
+export const modelTemplateData = (data: any): TemplateDto => {
+    const dataModel = {
+        id: data.id,
+        title: data.title,
+        serviceId: data.serviceId,
+        templateName: data.templateName,
+        templateData: JSON.parse(data.data),
+        cc: data.cc,
+        bcc: data.bcc,
+        attachment: JSON.parse(data.attachment).reduce((acc, curr) => {
+            const data = {
+                attachmentName: curr.attachmentName,
+                attachmentData: JSON.parse(curr.attachmentData)
+            };
+            return [...acc, data];
+        }, [])
+    };
+    return dataModel;
 };

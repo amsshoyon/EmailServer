@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTemplateDto } from './dto/create-template-dto';
+import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { Template } from './template.entity';
 import { TemplateRepository } from './template.repository';
@@ -12,7 +12,7 @@ export class TemplateService {
         private templateRepository: TemplateRepository
     ) {}
 
-    async getAllTemplates(filterDto: GetTemplateFilterDto): Promise<{ result: Template[]; count: number }> {
+    async getAllTemplates(filterDto: GetTemplateFilterDto): Promise<{ templates: TemplateDto[]; count: number }> {
         return this.templateRepository.getTemplates(filterDto);
     }
 
@@ -23,7 +23,7 @@ export class TemplateService {
         return template;
     }
 
-    async createTemplate(createTemplateDto: CreateTemplateDto): Promise<Template> {
+    async createTemplate(createTemplateDto: CreateTemplateDto): Promise<TemplateDto> {
         return this.templateRepository.createTemplate(createTemplateDto);
     }
 

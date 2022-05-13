@@ -7,8 +7,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 
 @Controller('service')
-@UseInterceptors(ResponseInterceptor)
 @UseGuards(AuthGuard())
+@UseInterceptors(ResponseInterceptor)
 export class ServiceController {
     constructor(private serviceService: ServiceService) {}
 

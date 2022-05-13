@@ -13,7 +13,7 @@ import { PassportModule } from '@nestjs/passport';
         JwtModule.register({
             secret: process.env.SECRET_KEY,
             signOptions: {
-                expiresIn: 3600
+                expiresIn: 3600 * 24
             }
         }),
         TypeOrmModule.forFeature([UserRepository])

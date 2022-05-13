@@ -7,8 +7,8 @@ import { Template } from './template.entity';
 import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
 
 @Controller('template')
-@UseInterceptors(ResponseInterceptor)
 @UseGuards(AuthGuard())
+@UseInterceptors(ResponseInterceptor)
 export class TemplateController {
     constructor(private templateService: TemplateService) {}
 

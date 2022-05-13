@@ -1,7 +1,4 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Template } from 'src/template/template.entity';
-import { TemplateRepository } from 'src/template/template.repository';
 import { modelTemplateData } from 'src/utils/common';
 import { EmailDto } from './dto/mailDto';
 import * as fs from 'fs';
@@ -9,25 +6,15 @@ const ejs = require('ejs');
 import { join } from 'path';
 import { Mailer } from 'src/utils/sendMail';
 import { pdfGenerator } from 'src/utils/pdfGenerator';
-const puppeteer = require('puppeteer');
+import { TemplateService } from 'src/template/template.service';
 
 @Injectable()
 export class SendMailService {
-    constructor(
-        @InjectRepository(TemplateRepository)
-        private templateRepository: TemplateRepository
-    ) {}
-
-    async getTemplateById(id: number): Promise<Template> {
-        const template = await this.templateRepository.findOne(id);
-        if (!template) throw new NotFoundException(`Template with id ${id} not found`);
-        template.attachment = JSON.parse(template.attachment);
-        return template;
-    }
+    constructor(private templateService: TemplateService) {}
 
     async sendEmail(emailDto: EmailDto): Promise<any> {
         const { serviceId, data } = emailDto;
-        const template = await this.templateRepository.findOne(serviceId);
+        const template = await this.templateService.getTemplateById(parseInt(serviceId));
         if (!template) throw new NotFoundException(`Template with id ${serviceId} not found`);
         const dataModel = modelTemplateData(template);
         const templateName = dataModel.templateName;

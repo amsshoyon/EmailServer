@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
 const _config = {
-    PROJECT_ID: '486815242076',
-    EMAIL: 'amsshoyon@gmail.com',
-    EMAIL_CLIENT_ID: '3761349388-51e1sei9f6rp5u6djnv9ojr92mujh3e5.apps.googleusercontent.com',
-    EMAIL_CLIENT_SECRET: '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',
-    EMAIL_REFRESH_TOKEN: '1//04RU_JJ0nKs2rCgYIARAAGAQSNwF-L9IrCT7bPQzX5D3ecEKkqJE0KUd19-lci1AX21aC7u90xqDKuOzVgSaLdpqpGeqgv1xuQKo'
+    PROJECT_ID: process.env.PROJECT_ID,
+    EMAIL_TO: process.env.EMAIL_TO,
+    EMAIL_FROM: process.env.EMAIL_FROM,
+    EMAIL_CLIENT_ID: process.env.EMAIL_CLIENT_ID,
+    EMAIL_CLIENT_SECRET: process.env.EMAIL_CLIENT_SECRET,
+    EMAIL_REFRESH_TOKEN: process.env.EMAIL_REFRESH_TOKEN
 };
 
 const transporter = nodemailer.createTransport(
@@ -14,7 +15,7 @@ const transporter = nodemailer.createTransport(
         secure: false, // use SSL
         auth: {
             type: 'OAuth2',
-            user: _config.EMAIL,
+            user: _config.EMAIL_TO,
             refreshToken: _config.EMAIL_REFRESH_TOKEN,
             clientId: _config.EMAIL_CLIENT_ID,
             clientSecret: _config.EMAIL_CLIENT_SECRET
@@ -23,18 +24,15 @@ const transporter = nodemailer.createTransport(
             rejectUnauthorized: false
         }
     },
-    { from: 'ShareTrip Test Email' }
+    { from: _config.EMAIL_FROM }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 transporter.verify((error, success) => {
-    if (error) {
-        return console.log('transporter:', error);
-    }
-    // console.log('Server is ready for mailing: ', success);
+    if (error) return console.log('transporter:', error);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     transporter.on('token', token => {
-        console.log('User: %s', token.user);
-        // console.log('Access Token: %s', token.accessToken)
-        console.log('Expires: %s', new Date(token.expires));
+        // Something
     });
 });
 

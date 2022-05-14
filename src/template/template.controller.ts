@@ -3,7 +3,6 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query, UseGua
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 import { TemplateService } from './template.service';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
-import { Template } from './template.entity';
 import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
 
 @Controller('template')
@@ -18,7 +17,7 @@ export class TemplateController {
     }
 
     @Get('/:id')
-    getTemplatesById(@Param('id', ParseIntPipe) id: number): Promise<Template> {
+    getTemplatesById(@Param('id', ParseIntPipe) id: number): Promise<TemplateDto> {
         return this.templateService.getTemplateById(id);
     }
 

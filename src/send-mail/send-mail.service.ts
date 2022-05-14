@@ -1,12 +1,12 @@
+import * as fs from 'fs';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { modelTemplateData } from 'src/utils/common';
 import { EmailDto } from './dto/mailDto';
-import * as fs from 'fs';
-const ejs = require('ejs');
 import { join } from 'path';
 import { Mailer } from 'src/utils/sendMail';
 import { pdfGenerator } from 'src/utils/pdfGenerator';
 import { TemplateService } from 'src/template/template.service';
+const ejs = require('ejs');
 
 @Injectable()
 export class SendMailService {

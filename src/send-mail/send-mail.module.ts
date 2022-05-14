@@ -1,3 +1,4 @@
+import { TemplateService } from './../template/template.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TemplateRepository } from 'src/template/template.repository';
@@ -7,6 +8,6 @@ import { SendMailService } from './send-mail.service';
 @Module({
     imports: [TypeOrmModule.forFeature([TemplateRepository])],
     controllers: [SendMailController],
-    providers: [SendMailService]
+    providers: [TemplateService, SendMailService]
 })
 export class SendMailModule {}

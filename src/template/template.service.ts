@@ -4,6 +4,7 @@ import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { Template } from './template.entity';
 import { TemplateRepository } from './template.repository';
+import { modelTemplateData } from 'src/utils/common';
 
 @Injectable()
 export class TemplateService {
@@ -16,11 +17,10 @@ export class TemplateService {
         return this.templateRepository.getTemplates(filterDto);
     }
 
-    async getTemplateById(id: number): Promise<Template> {
+    async getTemplateById(id: number): Promise<TemplateDto> {
         const template = await this.templateRepository.findOne(id);
         if (!template) throw new NotFoundException(`Template with id ${id} not found`);
-        template.attachment = JSON.parse(template.attachment);
-        return template;
+        return modelTemplateData(template);
     }
 
     async createTemplate(createTemplateDto: CreateTemplateDto): Promise<TemplateDto> {

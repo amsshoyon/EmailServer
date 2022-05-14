@@ -4,7 +4,7 @@ import { join } from 'path';
 const ejs = require('ejs');
 const puppeteer = require('puppeteer');
 
-export const pdfGenerator = async (attachmentName, attachmentData): Promise<any> => {
+export const pdfGenerator = async (attachmentName: string, attachmentData: object): Promise<any> => {
     try {
         const template = fs.readFileSync(join(process.cwd(), `storage/${attachmentName}`), 'utf8');
         const html = ejs.render(template, attachmentData);

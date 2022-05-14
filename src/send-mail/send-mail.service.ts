@@ -15,11 +15,9 @@ export class SendMailService {
     async sendEmail(emailDto: EmailDto): Promise<any> {
         const { serviceId, data } = emailDto;
         const template = await this.templateService.getTemplateById(parseInt(serviceId));
-        if (!template) throw new NotFoundException(`Template with id ${serviceId} not found`);
-        const dataModel = modelTemplateData(template);
-        const templateName = dataModel.templateName;
+        const templateName = template.templateName;
 
-        const attachments = await dataModel.attachment.reduce(async (acc, curr) => {
+        const attachments = await template.attachment.reduce(async (acc, curr) => {
             const buffer = await pdfGenerator(curr.attachmentName, curr.attachmentData);
             const attachmentObj = {
                 filename: curr.attachmentName.replace('.html', '.pdf'),
@@ -30,11 +28,11 @@ export class SendMailService {
 
         try {
             const templateHtml = fs.readFileSync(join(process.cwd(), `storage/${templateName}`), 'utf8');
-            const html = ejs.render(templateHtml, dataModel.templateData);
+            const html = ejs.render(templateHtml, template.templateData);
             const message = {
                 to: 'amsshoyon@gmail.com',
-                cc: dataModel.cc,
-                bcc: dataModel.bcc,
+                cc: template.cc,
+                bcc: template.bcc,
                 subject: 'test email',
                 html: html,
                 attachments: attachments

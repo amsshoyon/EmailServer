@@ -1,0 +1,15 @@
+db:
+  synchronize: true
+
+jwt: 
+  sectretKey: 'topSecret23'
+
+oAuth: 
+  projectId: '486815242076'
+  clientId: '3761349388-51e1sei9f6rp5u6djnv9ojr92mujh3e5.apps.googleusercontent.com'
+  clientSecret: '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'
+  refreshToken: '1//04RU_JJ0nKs2rCgYIARAAGAQSNwF-L9IrCT7bPQzX5D3ecEKkqJE0KUd19-lci1AX21aC7u90xqDKuOzVgSaLdpqpGeqgv1xuQKo'
+
+mailing: 
+  to: 'amsshoyon@gmail.com'
+  from: 'amsshoyon@gmail.com'

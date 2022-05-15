@@ -1,11 +1,15 @@
 const nodemailer = require('nodemailer');
+import * as config from 'config';
+const oAuthConfig: any = config.get('oAuth');
+const mailConfig: any = config.get('mailing');
+
 const _config = {
-    PROJECT_ID: process.env.PROJECT_ID,
-    EMAIL_TO: process.env.EMAIL_TO,
-    EMAIL_FROM: process.env.EMAIL_FROM,
-    EMAIL_CLIENT_ID: process.env.EMAIL_CLIENT_ID,
-    EMAIL_CLIENT_SECRET: process.env.EMAIL_CLIENT_SECRET,
-    EMAIL_REFRESH_TOKEN: process.env.EMAIL_REFRESH_TOKEN
+    EMAIL_TO: mailConfig.to,
+    EMAIL_FROM: mailConfig.from,
+    PROJECT_ID: oAuthConfig.projectId,
+    EMAIL_CLIENT_ID: oAuthConfig.clientId,
+    EMAIL_CLIENT_SECRET: oAuthConfig.clientSecret,
+    EMAIL_REFRESH_TOKEN: oAuthConfig.refreshToken
 };
 
 const transporter = nodemailer.createTransport(

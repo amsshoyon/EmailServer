@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 import { Logger, InternalServerErrorException } from '@nestjs/common';
 import * as config from 'config';
+const logger = new Logger();
 const oAuthConfig: any = config.get('oAuth');
 const mailConfig: any = config.get('mailing');
 
@@ -35,7 +36,7 @@ const transporter = nodemailer.createTransport(
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 transporter.verify((error, success) => {
     if (error) {
-        Logger.error(error);
+        logger.error(error);
         throw new InternalServerErrorException();
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

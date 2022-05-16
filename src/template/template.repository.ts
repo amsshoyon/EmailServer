@@ -16,7 +16,7 @@ export class TemplateRepository extends Repository<Template> {
     }
 
     async createTemplate(createServiceDto: CreateTemplateDto): Promise<TemplateDto> {
-        const { title, templateName, serviceId, data, cc, bcc, attachment } = createServiceDto;
+        const { title, templateName, serviceId, templateData, cc, bcc, attachment } = createServiceDto;
         const fileName = await SaveFileFromBase64(templateName, title);
         if (!fileName) throw new InternalServerErrorException(`Error writting file`);
         let attachmentArr = [];
@@ -35,7 +35,7 @@ export class TemplateRepository extends Repository<Template> {
         const template = new Template();
         template.title = title;
         template.templateName = fileName;
-        template.data = toString(data);
+        template.data = toString(templateData);
         template.cc = cc;
         template.bcc = bcc;
         template.serviceId = serviceId;

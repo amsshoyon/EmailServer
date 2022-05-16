@@ -12,7 +12,7 @@ async function bootstrap() {
     app.enableCors();
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));
-    logger.log(`App started on port ${port}`);
+    logger.log(`❤️  App started on port ${port}`);
     await app.listen(port);
 }
 bootstrap();

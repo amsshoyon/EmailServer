@@ -8,7 +8,7 @@ export class AttachmentDto {
 export class CreateTemplateDto {
     @IsNotEmpty() title: string;
     templateName: string;
-    data: string;
+    templateData: string;
     cc: string;
     bcc: string;
     attachment: AttachmentDto[];

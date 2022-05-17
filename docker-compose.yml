@@ -1,41 +1,56 @@
 version: '3.8'
 
 services:
+    mysql:
+        container_name: mysql-app
+        image: mysql:latest
+        restart: unless-stopped
+        networks:
+            - backend
+        ports:
+            - ${MYSQL_PORT}:${MYSQL_PORT}
+        expose:
+            - ${MYSQL_PORT}
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - my-db:/var/lib/mysql
+    phpmyadmin:
+        container_name: phpmyadmin-app
+        image: phpmyadmin/phpmyadmin:4.7
+        depends_on:
+            - mysql
+        networks:
+            - backend
+        ports:
+            - "30002:80"
+        environment:
+            - PMA_HOST=mysql-app
+            - PMA_PORT=${MYSQL_PORT}
+        volumes:
+            - /sessions
     dev:
-        container_name: mail_server_api_dev
+        container_name: mailer_api_dev
         image: mail-server-api-dev:1.0.0
         build:
             context: .
             target: development
             dockerfile: ./Dockerfile
-        command: npm run start:debug
+        command: yarn start:dev
         ports:
-            - 3000:3000
-            - 9229:9229
+            - 8000:8000
         networks:
-            - nesjs-network
+            - backend
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules
         restart: unless-stopped
-    prod:
-        container_name: mail_server_api_prod
-        image: mail-server-api-prod:1.0.0
-        build:
-            context: .
-            target: production
-            dockerfile: ./Dockerfile
-        command: npm run start:prod
-        ports:
-            - 3000:3000
-            - 9229:9229
-        networks:
-            - nesjs-network
-        volumes:
-            - .:/usr/src/app
-            - /usr/src/app/node_modules
-        restart: unless-stopped
-    
-
+        depends_on:
+            - mysql
 networks:
-    nesjs-network:
+    backend:
+volumes:
+    my-db:

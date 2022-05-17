@@ -1,15 +1,3 @@
-server:
-  port: 8080
-
-db:
-  type: 'mysql'
-  name: 'test'
-  host: 'localhost'
-  port: 3306
-  user: 'root'
-  password: 'Admin1234!@#'
-  synchronize: true
-
 jwt: 
   sectretKey: 'topSecret23'
 

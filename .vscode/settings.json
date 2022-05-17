@@ -10,5 +10,7 @@
         "test": true,
         "dist": true,
         ".vscode": false
-    }
+    },
+    "gitlens.codeLens.authors.enabled": false,
+    "gitlens.codeLens.enabled": false
 }

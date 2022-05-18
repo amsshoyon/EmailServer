@@ -24,7 +24,6 @@ export class SendMailService {
             };
             return [...(await acc), attachmentObj];
         }, Promise.resolve([]));
-
         try {
             const templateHtml = fs.readFileSync(join(process.cwd(), `storage/${templateName}`), 'utf8');
             const html = ejs.render(templateHtml, template.templateData);

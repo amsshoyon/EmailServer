@@ -6,8 +6,10 @@ import { GetUser } from './get-user.decorator';
 import { User } from './user.entity';
 import { UserResponse } from './user.interface';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('Authentications')
 @UseInterceptors(ResponseInterceptor)
 export class AuthController {
     constructor(private authService: AuthService) {}

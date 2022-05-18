@@ -5,8 +5,11 @@ import { Service } from './service.entity';
 import { GetServiceFilterDto } from './dto/get-service-filter.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('service')
+@ApiTags('Services')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard())
 @UseInterceptors(ResponseInterceptor)
 export class ServiceController {

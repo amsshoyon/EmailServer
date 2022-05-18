@@ -26,11 +26,12 @@ services:
         environment:
             - PMA_HOST=mysql-app
             - PMA_PORT=${MYSQL_PORT}
+            - PMA_ARBITRARY=1
         volumes:
             - /sessions
     dev:
         container_name: mailer_api_dev
-        image: mail-server-api-dev:1.0.0
+        image: mailer-api-dev
         build:
             context: .
             target: development
@@ -39,7 +40,7 @@ services:
         expose:
             - ${MYSQL_PORT}
         ports:
-            - 8000:8000
+            - ${PORT}:${PORT}
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules

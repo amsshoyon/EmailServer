@@ -1,5 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateServiceDto {
-    @IsNotEmpty() title: string;
+    @ApiProperty() @IsNotEmpty() title: string;
 }

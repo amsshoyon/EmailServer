@@ -4,8 +4,11 @@ import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 import { TemplateService } from './template.service';
 import { GetTemplateFilterDto } from './dto/get-template-filter.dto';
 import { CreateTemplateDto, TemplateDto } from './dto/template-dtos';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('template')
+@ApiTags('Templates')
+@ApiBearerAuth('access-token')
 @UseGuards(AuthGuard())
 @UseInterceptors(ResponseInterceptor)
 export class TemplateController {

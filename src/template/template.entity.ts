@@ -1,4 +1,4 @@
-import { Service } from 'src/service/service.entity';
+import { Project } from 'src/project/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, ManyToOne } from 'typeorm';
 
 @Entity()
@@ -27,9 +27,9 @@ export class Template extends BaseEntity {
     @Column({ default: true })
     isActive: boolean;
 
-    @ManyToOne(() => Service, service => service.templates, { eager: false })
-    service: Service;
+    @ManyToOne(() => Project, project => project.templates, { eager: false })
+    project: Project;
 
     @Column()
-    serviceId: number;
+    projectId: number;
 }

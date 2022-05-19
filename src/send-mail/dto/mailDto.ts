@@ -11,6 +11,6 @@ class TemplateDto {
 }
 
 export class EmailDto {
-    @IsNotEmpty() serviceId: string;
+    @IsNotEmpty() templateId: string;
     @IsNotEmpty() data: TemplateDto;
 }

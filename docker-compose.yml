@@ -5,6 +5,8 @@ services:
         container_name: mysql-app
         image: mysql:latest
         restart: unless-stopped
+        security_opt:
+            - seccomp:unconfined
         ports:
             - ${MYSQL_PORT}:${MYSQL_PORT}
         expose:

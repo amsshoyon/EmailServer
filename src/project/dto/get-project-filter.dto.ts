@@ -1,6 +1,6 @@
 import { IsOptional, IsNotEmpty } from 'class-validator';
 
-export class GetServiceFilterDto {
+export class GetProjectFilterDto {
     @IsOptional()
     @IsNotEmpty()
     search: string;

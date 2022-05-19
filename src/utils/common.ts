@@ -42,7 +42,7 @@ export const modelTemplateData = (data: any): TemplateDto => {
     const dataModel = {
         id: data.id,
         title: data.title,
-        serviceId: data.serviceId,
+        projectId: data.projectId,
         templateName: data.templateName,
         templateData: JSON.parse(data.data),
         cc: data.cc,

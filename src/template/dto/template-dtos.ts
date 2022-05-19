@@ -12,13 +12,13 @@ export class CreateTemplateDto {
     cc: string;
     bcc: string;
     attachment: AttachmentDto[];
-    serviceId: number;
+    projectId: number;
 }
 
 export class TemplateDto {
     id: number;
     title: string;
-    serviceId: number;
+    projectId: number;
     templateName: string;
     templateData: object;
     cc: string;

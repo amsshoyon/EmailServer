@@ -12,8 +12,8 @@ export class SendMailService {
     constructor(private templateService: TemplateService) {}
 
     async sendEmail(emailDto: EmailDto): Promise<any> {
-        const { serviceId, data } = emailDto;
-        const template = await this.templateService.getTemplateById(parseInt(serviceId));
+        const { templateId, data } = emailDto;
+        const template = await this.templateService.getTemplateById(parseInt(templateId));
         const templateName = template.templateName;
 
         const attachments = await template.attachment.reduce(async (acc, curr) => {

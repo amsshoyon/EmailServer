@@ -10,7 +10,7 @@ async function bootstrap() {
         .setTitle('Mailer APIs')
         .setVersion('1.0')
         .addBearerAuth(
-            { 
+            {
                 description: `[just text field] Please enter token in following format: Bearer <JWT>`,
                 name: 'Authorization',
                 bearerFormat: 'Bearer',
@@ -18,7 +18,7 @@ async function bootstrap() {
                 type: 'http',
                 in: 'Header'
             },
-            'access-token',
+            'access-token'
         )
         .build();
     const port = process.env.PORT || 8000;
